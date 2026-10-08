@@ -1,0 +1,494 @@
+{% extends "base.html" %}
+
+{% block title %}Progress - UniPlan{% endblock %}
+
+{% block content %}
+
+<!-- Page Header -->
+<div class="mb-4">
+    <h2 class="fw-bold mb-1">
+        <i class="bi bi-bar-chart-line text-primary"></i>
+        Study Progress
+    </h2>
+
+    <p class="text-muted mb-0">
+        Track your academic progress and study performance.
+    </p>
+</div>
+
+
+<!-- Top Statistics -->
+<div class="row g-4 mb-4">
+
+    <!-- Overall Progress -->
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+
+                <div class="display-5 text-primary mb-2">
+                    📊
+                </div>
+
+                <h6 class="text-muted">
+                    Overall Task Progress
+                </h6>
+
+                <h1 class="fw-bold">
+                    {{ progress|default(0) }}%
+                </h1>
+
+                <div class="progress mt-3" style="height: 12px;">
+                    <div class="progress-bar"
+                         role="progressbar"
+                         style="width: {{ progress|default(0) }}%;">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Completed Tasks -->
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+
+                <div class="display-5 text-success mb-2">
+                    ✅
+                </div>
+
+                <h6 class="text-muted">
+                    Completed Tasks
+                </h6>
+
+                <h1 class="fw-bold text-success">
+                    {{ completed_tasks|default(0) }}
+                </h1>
+
+                <p class="text-muted mb-0">
+                    Tasks completed successfully
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Pending Tasks -->
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+
+                <div class="display-5 text-warning mb-2">
+                    ⏳
+                </div>
+
+                <h6 class="text-muted">
+                    Pending Tasks
+                </h6>
+
+                <h1 class="fw-bold text-warning">
+                    {{ pending_tasks|default(0) }}
+                </h1>
+
+                <p class="text-muted mb-0">
+                    Tasks remaining
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- Smart Study Section -->
+<div class="row g-4 mb-4">
+
+    <!-- Study Streak -->
+    <div class="col-md-6">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex align-items-center">
+
+                    <div class="display-5 me-3">
+                        🔥
+                    </div>
+
+                    <div>
+
+                        <h5 class="fw-bold mb-1">
+                            Study Streak
+                        </h5>
+
+                        <h2 class="fw-bold mb-1">
+                            {{ study_streak|default(0) }} Days
+                        </h2>
+
+                        {% if study_streak|default(0) == 0 %}
+
+                            <p class="text-muted mb-0">
+                                Start completing tasks today!
+                            </p>
+
+                        {% elif study_streak|default(0) < 3 %}
+
+                            <p class="text-muted mb-0">
+                                Good start! Keep going.
+                            </p>
+
+                        {% elif study_streak|default(0) < 7 %}
+
+                            <p class="text-muted mb-0">
+                                Great consistency! 💪
+                            </p>
+
+                        {% else %}
+
+                            <p class="text-muted mb-0">
+                                Excellent study habit! 🏆
+                            </p>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Smart Recommendation -->
+    <div class="col-md-6">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex align-items-start">
+
+                    <div class="display-5 me-3">
+                        🧠
+                    </div>
+
+                    <div>
+
+                        <h5 class="fw-bold">
+                            Smart Recommendation
+                        </h5>
+
+                        <p class="text-muted mb-0">
+                            {{ smart_recommendation|default("Keep completing your tasks regularly to improve your study progress.") }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Subject-wise Progress -->
+<div class="card border-0 shadow-sm mb-4">
+
+    <div class="card-header bg-white border-0 py-3">
+
+        <div class="d-flex justify-content-between align-items-center">
+
+            <div>
+
+                <h5 class="fw-bold mb-1">
+                    📚 Subject-wise Progress
+                </h5>
+
+                <p class="text-muted small mb-0">
+                    See how much work you have completed for each subject.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+        {% if subject_progress %}
+
+        <div class="row g-4">
+
+            {% for subject in subject_progress %}
+
+            <div class="col-md-6">
+
+                <div class="border rounded p-3 h-100">
+
+                    <!-- Subject Header -->
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+
+                        <div>
+
+                            <h6 class="fw-bold mb-0">
+                                {{ subject.subject_name }}
+                            </h6>
+
+                            {% if subject.subject_code %}
+
+                            <small class="text-muted">
+                                {{ subject.subject_code }}
+                            </small>
+
+                            {% endif %}
+
+                        </div>
+
+                        <span class="badge bg-primary">
+                            {{ subject.percentage|default(0) }}%
+                        </span>
+
+                    </div>
+
+
+                    <!-- Progress Bar -->
+                    <div class="progress mb-3"
+                         style="height: 10px;">
+
+                        <div class="progress-bar"
+                             role="progressbar"
+                             style="width: {{ subject.percentage|default(0) }}%;">
+                        </div>
+
+                    </div>
+
+
+                    <!-- Task Information -->
+                    <div class="d-flex justify-content-between">
+
+                        <small class="text-success">
+                            ✓ Completed:
+                            {{ subject.completed|default(0) }}
+                        </small>
+
+                        <small class="text-muted">
+                            Total:
+                            {{ subject.total|default(0) }}
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <!-- Empty State -->
+        <div class="text-center py-5">
+
+            <div class="display-4 mb-3">
+                📚
+            </div>
+
+            <h5 class="fw-bold">
+                No Subject Data Yet
+            </h5>
+
+            <p class="text-muted">
+                Add subjects and tasks to see subject-wise progress.
+            </p>
+
+            <a href="{{ url_for('subjects') }}"
+               class="btn btn-primary">
+
+                <i class="bi bi-plus-circle"></i>
+                Add Subject
+
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<!-- Progress Summary -->
+<div class="card border-0 shadow-sm mb-4">
+
+    <div class="card-header bg-white border-0 py-3">
+
+        <h5 class="fw-bold mb-0">
+            📈 Progress Summary
+        </h5>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="row g-4">
+
+            <!-- Completed -->
+            <div class="col-md-6">
+
+                <div class="p-4 border rounded">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h6 class="fw-bold">
+                                Completed Work
+                            </h6>
+
+                            <p class="text-muted small mb-0">
+                                Tasks you have already completed.
+                            </p>
+
+                        </div>
+
+                        <div class="fs-2">
+                            ✅
+                        </div>
+
+                    </div>
+
+                    <h3 class="fw-bold text-success mt-3">
+                        {{ completed_tasks|default(0) }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <!-- Pending -->
+            <div class="col-md-6">
+
+                <div class="p-4 border rounded">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h6 class="fw-bold">
+                                Remaining Work
+                            </h6>
+
+                            <p class="text-muted small mb-0">
+                                Tasks that still need your attention.
+                            </p>
+
+                        </div>
+
+                        <div class="fs-2">
+                            ⏳
+                        </div>
+
+                    </div>
+
+                    <h3 class="fw-bold text-warning mt-3">
+                        {{ pending_tasks|default(0) }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Motivation -->
+<div class="card border-0 shadow-sm">
+
+    <div class="card-body text-center py-4">
+
+        {% if progress|default(0) >= 80 %}
+
+            <div class="display-5 mb-2">
+                🏆
+            </div>
+
+            <h4 class="fw-bold">
+                Excellent Progress!
+            </h4>
+
+            <p class="text-muted mb-0">
+                You are doing a great job. Keep maintaining your consistency!
+            </p>
+
+        {% elif progress|default(0) >= 50 %}
+
+            <div class="display-5 mb-2">
+                💪
+            </div>
+
+            <h4 class="fw-bold">
+                Good Progress!
+            </h4>
+
+            <p class="text-muted mb-0">
+                You are halfway there. Keep working consistently.
+            </p>
+
+        {% elif progress|default(0) > 0 %}
+
+            <div class="display-5 mb-2">
+                🚀
+            </div>
+
+            <h4 class="fw-bold">
+                Keep Going!
+            </h4>
+
+            <p class="text-muted mb-0">
+                Every completed task takes you one step closer to your goal.
+            </p>
+
+        {% else %}
+
+            <div class="display-5 mb-2">
+                🌱
+            </div>
+
+            <h4 class="fw-bold">
+                Start Your Journey!
+            </h4>
+
+            <p class="text-muted mb-0">
+                Add your first task and start tracking your study progress.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block title %}Login - UniPlan{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+    <div class="col-md-7 col-lg-5">
+
+        <div class="card border-0 shadow-lg auth-card">
+
+            <div class="card-body p-4 p-md-5">
+
+                <!-- Header -->
+                <div class="text-center mb-4">
+
+                    <div class="auth-icon">
+                        <i class="bi bi-box-arrow-in-right"></i>
+                    </div>
+
+                    <h2 class="fw-bold mt-3">
+                        Welcome Back
+                    </h2>
+
+                    <p class="text-secondary">
+                        Login to continue to your UniPlan dashboard.
+                    </p>
+
+                </div>
+
+
+                <!-- Login Form -->
+                <form
+                    method="POST"
+                    action="{{ url_for('login') }}"
+                >
+
+                    <!-- Email -->
+                    <div class="mb-3">
+
+                        <label
+                            for="email"
+                            class="form-label fw-semibold"
+                        >
+                            Email Address
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+                                <i class="bi bi-envelope"></i>
+                            </span>
+
+                            <input
+                                type="email"
+                                class="form-control"
+                                id="email"
+                                name="email"
+                                placeholder="Enter your email"
+                                required
+                                autocomplete="email"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Password -->
+                    <div class="mb-4">
+
+                        <label
+                            for="password"
+                            class="form-label fw-semibold"
+                        >
+                            Password
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+                                <i class="bi bi-lock"></i>
+                            </span>
+
+                            <input
+                                type="password"
+                                class="form-control"
+                                id="password"
+                                name="password"
+                                placeholder="Enter your password"
+                                required
+                                autocomplete="current-password"
+                            >
+
+                            <button
+                                type="button"
+                                class="btn btn-outline-secondary"
+                                onclick="togglePassword('password', this)"
+                            >
+                                <i class="bi bi-eye"></i>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Login Button -->
+                    <button
+                        type="submit"
+                        class="btn btn-primary w-100 py-2"
+                    >
+                        <i class="bi bi-box-arrow-in-right"></i>
+                        Login
+                    </button>
+
+                </form>
+
+
+                <!-- Admin Information -->
+                <div class="alert alert-light border mt-4 mb-0">
+
+                    <div class="d-flex">
+
+                        <i class="bi bi-info-circle-fill text-primary me-2"></i>
+
+                        <div>
+
+                            <strong>Admin Access</strong>
+
+                            <p class="small text-secondary mb-0 mt-1">
+                                The administrator can manage and monitor
+                                registered students from the Admin Dashboard.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Register Link -->
+                <div class="text-center mt-4">
+
+                    <p class="text-secondary mb-0">
+
+                        Don't have an account?
+
+                        <a
+                            href="{{ url_for('register') }}"
+                            class="text-primary fw-semibold text-decoration-none"
+                        >
+                            Create Account
+                        </a>
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

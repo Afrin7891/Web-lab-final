@@ -1,0 +1,690 @@
+```html
+{% extends "base.html" %}
+
+{% block title %}Tasks - UniPlan{% endblock %}
+
+{% block content %}
+
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h2 class="fw-bold mb-1">
+            <i class="bi bi-check2-square text-primary"></i>
+            My Tasks
+        </h2>
+
+        <p class="text-muted mb-0">
+            Manage your study tasks and deadlines.
+        </p>
+    </div>
+
+</div>
+
+
+<!-- Add Task -->
+<div class="card border-0 shadow-sm mb-4">
+
+    <div class="card-header bg-white border-0 py-3">
+
+        <h5 class="fw-bold mb-0">
+            ➕ Add New Task
+        </h5>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <form method="POST" action="{{ url_for('tasks') }}">
+
+            <div class="row g-3">
+
+                <!-- Title -->
+                <div class="col-md-6">
+
+                    <label class="form-label fw-semibold">
+                        Task Title
+                    </label>
+
+                    <input
+                        type="text"
+                        name="title"
+                        class="form-control"
+                        placeholder="Example: Complete Networking Assignment"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Subject -->
+                <div class="col-md-6">
+
+                    <label class="form-label fw-semibold">
+                        Subject
+                    </label>
+
+                    <select name="subject_id" class="form-select">
+
+                        <option value="">
+                            Select Subject
+                        </option>
+
+                        {% for subject in subjects %}
+
+                        <option value="{{ subject['id'] }}">
+
+                            {{ subject['name'] }}
+
+                            {% if subject['code'] %}
+                                ({{ subject['code'] }})
+                            {% endif %}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- Description -->
+                <div class="col-md-6">
+
+                    <label class="form-label fw-semibold">
+                        Description
+                    </label>
+
+                    <textarea
+                        name="description"
+                        class="form-control"
+                        rows="3"
+                        placeholder="Write task details..."
+                    ></textarea>
+
+                </div>
+
+
+                <!-- Priority -->
+                <div class="col-md-3">
+
+                    <label class="form-label fw-semibold">
+                        Priority
+                    </label>
+
+                    <select name="priority" class="form-select">
+
+                        <option value="Low">
+                            Low
+                        </option>
+
+                        <option value="Medium" selected>
+                            Medium
+                        </option>
+
+                        <option value="High">
+                            High
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Deadline -->
+                <div class="col-md-3">
+
+                    <label class="form-label fw-semibold">
+                        Deadline
+                    </label>
+
+                    <input
+                        type="date"
+                        name="deadline"
+                        class="form-control"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="mt-3">
+
+                <button type="submit" class="btn btn-primary">
+
+                    <i class="bi bi-plus-circle"></i>
+                    Add Task
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- Search & Filter -->
+<div class="card border-0 shadow-sm mb-4">
+
+    <div class="card-body">
+
+        <form method="GET" action="{{ url_for('tasks') }}">
+
+            <div class="row g-3 align-items-end">
+
+                <!-- Search -->
+                <div class="col-md-6">
+
+                    <label class="form-label fw-semibold">
+                        🔍 Search Task
+                    </label>
+
+                    <input
+                        type="text"
+                        name="search"
+                        class="form-control"
+                        placeholder="Search by task title..."
+                        value="{{ search }}"
+                    >
+
+                </div>
+
+
+                <!-- Status -->
+                <div class="col-md-4">
+
+                    <label class="form-label fw-semibold">
+                        🎯 Filter Status
+                    </label>
+
+                    <select name="status" class="form-select">
+
+                        <option value=""
+                            {% if status_filter == '' %}
+                                selected
+                            {% endif %}
+                        >
+                            All Tasks
+                        </option>
+
+
+                        <option value="Pending"
+                            {% if status_filter == 'Pending' %}
+                                selected
+                            {% endif %}
+                        >
+                            Pending
+                        </option>
+
+
+                        <option value="Completed"
+                            {% if status_filter == 'Completed' %}
+                                selected
+                            {% endif %}
+                        >
+                            Completed
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Filter Button -->
+                <div class="col-md-2">
+
+                    <button
+                        type="submit"
+                        class="btn btn-outline-primary w-100"
+                    >
+
+                        <i class="bi bi-funnel"></i>
+                        Filter
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- Task List -->
+<div class="card border-0 shadow-sm">
+
+    <div class="card-header bg-white border-0 py-3">
+
+        <div class="d-flex justify-content-between align-items-center">
+
+            <h5 class="fw-bold mb-0">
+                📋 Task List
+            </h5>
+
+            <span class="badge bg-primary">
+                {{ tasks|length }} Tasks
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+        {% if tasks %}
+
+        <div class="row g-4">
+
+            {% for task in tasks %}
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="card h-100 border shadow-sm">
+
+                    <div class="card-body">
+
+                        <!-- Task Header -->
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+
+                            <h5 class="fw-bold mb-0">
+                                {{ task['title'] }}
+                            </h5>
+
+
+                            {% if task['status'] == 'Completed' %}
+
+                                <span class="badge bg-success">
+                                    ✓ Done
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-warning text-dark">
+                                    Pending
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Description -->
+                        {% if task['description'] %}
+
+                        <p class="text-muted small mb-3">
+                            {{ task['description'] }}
+                        </p>
+
+                        {% else %}
+
+                        <p class="text-muted small mb-3">
+                            No description provided.
+                        </p>
+
+                        {% endif %}
+
+
+                        <!-- Subject -->
+                        <div class="mb-2">
+
+                            <small class="text-muted">
+                                Subject
+                            </small>
+
+                            <br>
+
+                            {% if task['subject_name'] %}
+
+                                <span class="badge bg-light text-dark">
+
+                                    <i class="bi bi-book"></i>
+
+                                    {{ task['subject_name'] }}
+
+                                    {% if task['subject_code'] %}
+                                        ({{ task['subject_code'] }})
+                                    {% endif %}
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="text-muted">
+                                    No subject
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Original Priority -->
+                        <div class="mb-2">
+
+                            <small class="text-muted">
+                                Priority
+                            </small>
+
+                            <br>
+
+
+                            {% if task['priority'] == 'High' %}
+
+                                <span class="badge bg-danger">
+                                    🔴 High
+                                </span>
+
+
+                            {% elif task['priority'] == 'Medium' %}
+
+                                <span class="badge bg-warning text-dark">
+                                    🟡 Medium
+                                </span>
+
+
+                            {% else %}
+
+                                <span class="badge bg-secondary">
+                                    ⚪ Low
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Smart Priority -->
+                        <div class="mb-2">
+
+                            <small class="text-muted">
+                                Smart Priority
+                            </small>
+
+                            <br>
+
+
+                            {% if task['smart_priority'] == 'Urgent' %}
+
+                                <span class="badge bg-danger">
+                                    🚨 Urgent
+                                </span>
+
+
+                            {% elif task['smart_priority'] == 'High' %}
+
+                                <span class="badge bg-warning text-dark">
+                                    🔥 High
+                                </span>
+
+
+                            {% elif task['smart_priority'] == 'Medium' %}
+
+                                <span class="badge bg-info text-dark">
+                                    🔵 Medium
+                                </span>
+
+
+                            {% else %}
+
+                                <span class="badge bg-secondary">
+                                    ⚪ Low
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Deadline -->
+                        <div class="mb-3">
+
+                            <small class="text-muted">
+                                Deadline
+                            </small>
+
+                            <br>
+
+
+                            {% if task['deadline'] %}
+
+                                <strong>
+
+                                    <i class="bi bi-calendar-event"></i>
+
+                                    {{ task['deadline'] }}
+
+                                </strong>
+
+                                <br>
+
+
+                                {% if 'Overdue' in task['deadline_status'] %}
+
+                                    <span class="text-danger small fw-bold">
+                                        🚨 {{ task['deadline_status'] }}
+                                    </span>
+
+
+                                {% elif 'Today' in task['deadline_status'] %}
+
+                                    <span class="text-danger small fw-bold">
+                                        🔴 {{ task['deadline_status'] }}
+                                    </span>
+
+
+                                {% elif 'Tomorrow' in task['deadline_status'] %}
+
+                                    <span class="text-warning small fw-bold">
+                                        🟡 {{ task['deadline_status'] }}
+                                    </span>
+
+
+                                {% else %}
+
+                                    <span class="text-success small fw-bold">
+                                        🟢 {{ task['deadline_status'] }}
+                                    </span>
+
+                                {% endif %}
+
+
+                            {% else %}
+
+                                <span class="text-muted">
+                                    No deadline
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Actions -->
+                        <div class="d-flex gap-2">
+
+
+                            {% if task['status'] != 'Completed' %}
+
+                                <a
+                                    href="{{ url_for('complete_task', task_id=task['id']) }}"
+                                    class="btn btn-sm btn-success flex-grow-1"
+                                >
+
+                                    <i class="bi bi-check-circle"></i>
+
+                                    Complete
+
+                                </a>
+
+
+                            {% else %}
+
+                                <a
+                                    href="{{ url_for('complete_task', task_id=task['id']) }}"
+                                    class="btn btn-sm btn-secondary flex-grow-1"
+                                >
+
+                                    <i class="bi bi-arrow-counterclockwise"></i>
+
+                                    Mark Pending
+
+                                </a>
+
+                            {% endif %}
+
+
+                            <a
+                                href="{{ url_for('delete_task', task_id=task['id']) }}"
+                                class="btn btn-sm btn-outline-danger"
+                                onclick="return confirm('Are you sure you want to delete this task?');"
+                                title="Delete Task"
+                            >
+
+                                <i class="bi bi-trash"></i>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        {% else %}
+
+        <!-- Empty State -->
+        <div class="text-center py-5">
+
+            <div class="display-3 mb-3">
+                📝
+            </div>
+
+            <h5 class="fw-bold">
+                No Tasks Found
+            </h5>
+
+            <p class="text-muted">
+                Add a new task or change your search/filter.
+            </p>
+
+            <a
+                href="{{ url_for('tasks') }}"
+                class="btn btn-primary"
+            >
+
+                <i class="bi bi-plus-circle"></i>
+
+                Add Task
+
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<!-- Smart Priority Explanation -->
+<div class="card border-0 shadow-sm mt-4">
+
+    <div class="card-body">
+
+        <h5 class="fw-bold mb-3">
+            🧠 How Smart Priority Works
+        </h5>
+
+
+        <div class="row g-3">
+
+            <!-- Urgent -->
+            <div class="col-md-4">
+
+                <div class="p-3 bg-light rounded">
+
+                    <h6 class="fw-bold text-danger">
+                        🚨 Urgent
+                    </h6>
+
+                    <p class="small text-muted mb-0">
+
+                        Tasks with a deadline within
+                        2 days are automatically marked
+                        as Urgent.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- High -->
+            <div class="col-md-4">
+
+                <div class="p-3 bg-light rounded">
+
+                    <h6 class="fw-bold text-warning">
+                        🔥 High
+                    </h6>
+
+                    <p class="small text-muted mb-0">
+
+                        Tasks with a deadline within
+                        5 days receive higher priority.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Normal -->
+            <div class="col-md-4">
+
+                <div class="p-3 bg-light rounded">
+
+                    <h6 class="fw-bold text-success">
+                        🟢 Normal
+                    </h6>
+
+                    <p class="small text-muted mb-0">
+
+                        Tasks with more time remaining
+                        keep their original priority.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+```

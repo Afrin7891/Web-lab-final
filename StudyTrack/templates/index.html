@@ -1,0 +1,476 @@
+{% extends "base.html" %}
+
+{% block title %}Home - UniPlan{% endblock %}
+
+{% block content %}
+
+<!-- =========================
+     HERO SECTION
+========================= -->
+
+<section class="hero-section py-5">
+
+    <div class="row align-items-center">
+
+        <!-- Left Side -->
+        <div class="col-lg-7">
+
+            <span class="badge bg-primary-subtle text-primary mb-3 px-3 py-2">
+                <i class="bi bi-stars"></i>
+                Smart Student Productivity System
+            </span>
+
+            <h1 class="display-4 fw-bold mb-3">
+                Plan Your Study.
+                <span class="text-primary">
+                    Track Your Progress.
+                </span>
+            </h1>
+
+            <p class="lead text-secondary mb-4">
+                UniPlan is a student-focused web application that helps
+                students manage subjects, tasks, assignments, exams
+                and academic progress in one place.
+            </p>
+
+            {% if session.get('user_id') %}
+
+                {% if session.get('role') == 'admin' %}
+
+                    <a
+                        href="{{ url_for('admin_dashboard') }}"
+                        class="btn btn-primary btn-lg me-2"
+                    >
+                        <i class="bi bi-speedometer2"></i>
+                        Admin Dashboard
+                    </a>
+
+                {% else %}
+
+                    <a
+                        href="{{ url_for('dashboard') }}"
+                        class="btn btn-primary btn-lg me-2"
+                    >
+                        <i class="bi bi-speedometer2"></i>
+                        Go to Dashboard
+                    </a>
+
+                {% endif %}
+
+            {% else %}
+
+                <a
+                    href="{{ url_for('register') }}"
+                    class="btn btn-primary btn-lg me-2"
+                >
+                    <i class="bi bi-person-plus"></i>
+                    Get Started
+                </a>
+
+                <a
+                    href="{{ url_for('login') }}"
+                    class="btn btn-outline-primary btn-lg"
+                >
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    Login
+                </a>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- Right Side -->
+        <div class="col-lg-5 mt-5 mt-lg-0">
+
+            <div class="hero-card shadow-lg">
+
+                <div class="text-center mb-4">
+
+                    <div class="hero-icon">
+                        <i class="bi bi-mortarboard-fill"></i>
+                    </div>
+
+                    <h3 class="fw-bold mt-3">
+                        Study Smarter
+                    </h3>
+
+                    <p class="text-secondary">
+                        Everything you need for better academic planning.
+                    </p>
+
+                </div>
+
+
+                <div class="mini-feature">
+
+                    <div class="feature-icon bg-primary">
+                        <i class="bi bi-journal-bookmark-fill"></i>
+                    </div>
+
+                    <div>
+                        <h6 class="mb-1">
+                            Manage Subjects
+                        </h6>
+
+                        <small class="text-secondary">
+                            Organize all your courses.
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <div class="mini-feature">
+
+                    <div class="feature-icon bg-success">
+                        <i class="bi bi-check2-square"></i>
+                    </div>
+
+                    <div>
+                        <h6 class="mb-1">
+                            Track Tasks
+                        </h6>
+
+                        <small class="text-secondary">
+                            Never miss an important task.
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <div class="mini-feature">
+
+                    <div class="feature-icon bg-warning text-dark">
+                        <i class="bi bi-calendar-event"></i>
+                    </div>
+
+                    <div>
+                        <h6 class="mb-1">
+                            Plan Exams
+                        </h6>
+
+                        <small class="text-secondary">
+                            Keep your exam schedule organized.
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <div class="mini-feature">
+
+                    <div class="feature-icon bg-info">
+                        <i class="bi bi-graph-up-arrow"></i>
+                    </div>
+
+                    <div>
+                        <h6 class="mb-1">
+                            Monitor Progress
+                        </h6>
+
+                        <small class="text-secondary">
+                            See your academic progress.
+                        </small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     FEATURES SECTION
+========================= -->
+
+<section class="py-5">
+
+    <div class="text-center mb-5">
+
+        <span class="text-primary fw-semibold">
+            POWERFUL FEATURES
+        </span>
+
+        <h2 class="fw-bold mt-2">
+            Everything in One Place
+        </h2>
+
+        <p class="text-secondary">
+            UniPlan provides simple tools to organize your academic life.
+        </p>
+
+    </div>
+
+
+    <div class="row g-4">
+
+        <!-- Feature 1 -->
+        <div class="col-md-6 col-lg-4">
+
+            <div class="feature-card h-100">
+
+                <div class="feature-large-icon">
+                    <i class="bi bi-journal-text"></i>
+                </div>
+
+                <h5 class="fw-bold">
+                    Subject Management
+                </h5>
+
+                <p class="text-secondary">
+                    Add and manage subjects with subject code
+                    and credit information.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Feature 2 -->
+        <div class="col-md-6 col-lg-4">
+
+            <div class="feature-card h-100">
+
+                <div class="feature-large-icon">
+                    <i class="bi bi-list-check"></i>
+                </div>
+
+                <h5 class="fw-bold">
+                    Task Management
+                </h5>
+
+                <p class="text-secondary">
+                    Create tasks, set priorities and deadlines,
+                    and mark tasks as completed.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Feature 3 -->
+        <div class="col-md-6 col-lg-4">
+
+            <div class="feature-card h-100">
+
+                <div class="feature-large-icon">
+                    <i class="bi bi-file-earmark-text"></i>
+                </div>
+
+                <h5 class="fw-bold">
+                    Assignment Planner
+                </h5>
+
+                <p class="text-secondary">
+                    Keep track of assignments and their
+                    submission deadlines.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Feature 4 -->
+        <div class="col-md-6 col-lg-4">
+
+            <div class="feature-card h-100">
+
+                <div class="feature-large-icon">
+                    <i class="bi bi-calendar3"></i>
+                </div>
+
+                <h5 class="fw-bold">
+                    Exam Planner
+                </h5>
+
+                <p class="text-secondary">
+                    Store exam dates, times, rooms and
+                    related subjects.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Feature 5 -->
+        <div class="col-md-6 col-lg-4">
+
+            <div class="feature-card h-100">
+
+                <div class="feature-large-icon">
+                    <i class="bi bi-bar-chart-line"></i>
+                </div>
+
+                <h5 class="fw-bold">
+                    Progress Tracking
+                </h5>
+
+                <p class="text-secondary">
+                    Monitor completed and pending tasks
+                    through progress statistics.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Feature 6 -->
+        <div class="col-md-6 col-lg-4">
+
+            <div class="feature-card h-100">
+
+                <div class="feature-large-icon">
+                    <i class="bi bi-shield-lock"></i>
+                </div>
+
+                <h5 class="fw-bold">
+                    Secure Authentication
+                </h5>
+
+                <p class="text-secondary">
+                    Student and admin accounts are protected
+                    with authentication and authorization.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     HOW IT WORKS
+========================= -->
+
+<section class="py-5 bg-light rounded-4">
+
+    <div class="text-center mb-5">
+
+        <span class="text-primary fw-semibold">
+            HOW IT WORKS
+        </span>
+
+        <h2 class="fw-bold mt-2">
+            Start Managing Your Study in 3 Steps
+        </h2>
+
+    </div>
+
+
+    <div class="row g-4 text-center">
+
+        <!-- Step 1 -->
+        <div class="col-md-4">
+
+            <div class="step-number">
+                1
+            </div>
+
+            <h5 class="fw-bold mt-3">
+                Create Account
+            </h5>
+
+            <p class="text-secondary">
+                Register as a student and create your
+                personal UniPlan account.
+            </p>
+
+        </div>
+
+
+        <!-- Step 2 -->
+        <div class="col-md-4">
+
+            <div class="step-number">
+                2
+            </div>
+
+            <h5 class="fw-bold mt-3">
+                Plan Your Study
+            </h5>
+
+            <p class="text-secondary">
+                Add subjects, tasks, assignments and
+                upcoming exams.
+            </p>
+
+        </div>
+
+
+        <!-- Step 3 -->
+        <div class="col-md-4">
+
+            <div class="step-number">
+                3
+            </div>
+
+            <h5 class="fw-bold mt-3">
+                Track Progress
+            </h5>
+
+            <p class="text-secondary">
+                Complete your tasks and monitor your
+                academic progress.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     CALL TO ACTION
+========================= -->
+
+<section class="text-center py-5">
+
+    <h2 class="fw-bold">
+        Ready to Organize Your Academic Life?
+    </h2>
+
+    <p class="text-secondary mb-4">
+        Start using UniPlan today and make your study planning easier.
+    </p>
+
+    {% if not session.get('user_id') %}
+
+        <a
+            href="{{ url_for('register') }}"
+            class="btn btn-primary btn-lg"
+        >
+            <i class="bi bi-rocket-takeoff"></i>
+            Create Free Account
+        </a>
+
+    {% else %}
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="btn btn-primary btn-lg"
+        >
+            <i class="bi bi-arrow-right-circle"></i>
+            Go to Dashboard
+        </a>
+
+    {% endif %}
+
+</section>
+
+{% endblock %}

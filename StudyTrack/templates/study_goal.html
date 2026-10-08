@@ -1,0 +1,346 @@
+{% extends "base.html" %}
+
+{% block title %}Study Goal - UniPlan{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+    <div class="col-lg-8">
+
+        <!-- Page Header -->
+        <div class="mb-4">
+
+            <h2 class="fw-bold">
+                <i class="bi bi-bullseye text-primary"></i>
+                Study Goal
+            </h2>
+
+            <p class="text-secondary">
+                Set your weekly study target and stay consistent with your academic plan.
+            </p>
+
+        </div>
+
+
+        <!-- Goal Card -->
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body p-4 p-md-5">
+
+                <div class="text-center mb-4">
+
+                    <div
+                        class="rounded-circle bg-primary bg-opacity-10 d-inline-flex align-items-center justify-content-center"
+                        style="width: 80px; height: 80px;"
+                    >
+                        <i class="bi bi-bullseye text-primary fs-1"></i>
+                    </div>
+
+                    <h4 class="fw-bold mt-3">
+                        Set Your Weekly Study Goal
+                    </h4>
+
+                    <p class="text-secondary">
+                        Choose how many hours you want to study each week.
+                    </p>
+
+                </div>
+
+
+                <hr class="my-4">
+
+
+                <!-- Goal Form -->
+                <form method="POST" action="{{ url_for('study_goal') }}">
+
+                    <div class="mb-4">
+
+                        <label
+                            for="weekly_target"
+                            class="form-label fw-semibold"
+                        >
+                            Weekly Study Target
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+                                <i class="bi bi-clock"></i>
+                            </span>
+
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="weekly_target"
+                                name="weekly_target"
+                                min="1"
+                                max="168"
+                                value="{{ weekly_target|default(10) }}"
+                                required
+                            >
+
+                            <span class="input-group-text">
+                                Hours
+                            </span>
+
+                        </div>
+
+                        <div class="form-text">
+                            Set a realistic weekly study target between 1 and 168 hours.
+                        </div>
+
+                    </div>
+
+
+                    <!-- Quick Goal Options -->
+                    <div class="mb-4">
+
+                        <label class="form-label fw-semibold">
+                            Quick Select
+                        </label>
+
+                        <div class="d-flex flex-wrap gap-2">
+
+                            <button
+                                type="button"
+                                class="btn btn-outline-primary"
+                                onclick="setGoal(5)"
+                            >
+                                5 Hours
+                            </button>
+
+                            <button
+                                type="button"
+                                class="btn btn-outline-primary"
+                                onclick="setGoal(10)"
+                            >
+                                10 Hours
+                            </button>
+
+                            <button
+                                type="button"
+                                class="btn btn-outline-primary"
+                                onclick="setGoal(15)"
+                            >
+                                15 Hours
+                            </button>
+
+                            <button
+                                type="button"
+                                class="btn btn-outline-primary"
+                                onclick="setGoal(20)"
+                            >
+                                20 Hours
+                            </button>
+
+                            <button
+                                type="button"
+                                class="btn btn-outline-primary"
+                                onclick="setGoal(30)"
+                            >
+                                30 Hours
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Submit -->
+                    <div class="d-flex justify-content-end">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary px-4"
+                        >
+
+                            <i class="bi bi-check-circle"></i>
+                            Save Study Goal
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <!-- Current Goal -->
+        <div class="card border-0 shadow-sm mt-4">
+
+            <div class="card-body p-4">
+
+                <h5 class="fw-bold mb-3">
+
+                    <i class="bi bi-info-circle text-primary"></i>
+                    Current Goal
+
+                </h5>
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+
+                        <div class="p-3 bg-light rounded">
+
+                            <small class="text-secondary">
+                                Weekly Target
+                            </small>
+
+                            <h4 class="fw-bold mb-0 mt-1">
+
+                                {{ weekly_target|default(10) }}
+
+                                <small class="fs-6 text-secondary">
+                                    Hours
+                                </small>
+
+                            </h4>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <div class="p-3 bg-light rounded">
+
+                            <small class="text-secondary">
+                                Daily Average
+                            </small>
+
+                            <h4 class="fw-bold mb-0 mt-1">
+
+                                {{ (weekly_target|default(10) / 7)|round(1) }}
+
+                                <small class="fs-6 text-secondary">
+                                    Hours/day
+                                </small>
+
+                            </h4>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Study Tips -->
+        <div class="card border-0 shadow-sm mt-4">
+
+            <div class="card-body p-4">
+
+                <h5 class="fw-bold mb-3">
+
+                    <i class="bi bi-lightbulb text-warning"></i>
+                    Study Tips
+
+                </h5>
+
+                <div class="row g-3">
+
+                    <div class="col-md-4">
+
+                        <div class="text-center p-3">
+
+                            <i class="bi bi-calendar-check text-primary fs-2"></i>
+
+                            <h6 class="fw-bold mt-2">
+                                Plan
+                            </h6>
+
+                            <p class="small text-secondary mb-0">
+                                Plan your study sessions for the week.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-4">
+
+                        <div class="text-center p-3">
+
+                            <i class="bi bi-clock-history text-success fs-2"></i>
+
+                            <h6 class="fw-bold mt-2">
+                                Stay Consistent
+                            </h6>
+
+                            <p class="small text-secondary mb-0">
+                                Study regularly instead of studying only before exams.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-4">
+
+                        <div class="text-center p-3">
+
+                            <i class="bi bi-graph-up-arrow text-danger fs-2"></i>
+
+                            <h6 class="fw-bold mt-2">
+                                Track Progress
+                            </h6>
+
+                            <p class="small text-secondary mb-0">
+                                Check your progress regularly and improve your routine.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Back Button -->
+        <div class="mt-4">
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="btn btn-outline-primary"
+            >
+
+                <i class="bi bi-arrow-left"></i>
+                Back to Dashboard
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Quick Goal JavaScript -->
+<script>
+
+function setGoal(hours) {
+
+    document.getElementById("weekly_target").value = hours;
+
+}
+
+</script>
+
+{% endblock %}

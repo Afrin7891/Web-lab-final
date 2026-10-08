@@ -1,0 +1,233 @@
+```html
+{% extends "base.html" %}
+
+{% block title %}Subjects{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <div class="row g-4">
+
+        <!-- Add Subject Form -->
+        <div class="col-lg-4">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body p-4">
+
+                    <h2 class="h5 fw-bold mb-3">
+                        Add New Subject
+                    </h2>
+
+                    <form method="POST" action="{{ url_for('subjects') }}">
+
+                        <!-- Subject Name -->
+                        <div class="mb-3">
+
+                            <label for="subject_name"
+                                   class="form-label text-muted small fw-bold">
+                                SUBJECT NAME
+                            </label>
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="subject_name"
+                                name="name"
+                                required
+                                placeholder="e.g. Mathematics"
+                            >
+
+                        </div>
+
+
+                        <!-- Subject Code -->
+                        <div class="mb-3">
+
+                            <label for="subject_code"
+                                   class="form-label text-muted small fw-bold">
+                                SUBJECT CODE (OPTIONAL)
+                            </label>
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="subject_code"
+                                name="code"
+                                placeholder="e.g. MATH101"
+                            >
+
+                        </div>
+
+
+                        <!-- Credit -->
+                        <div class="mb-3">
+
+                            <label for="credit"
+                                   class="form-label text-muted small fw-bold">
+                                CREDIT / WEIGHT (OPTIONAL)
+                            </label>
+
+                            <input
+                                type="number"
+                                step="0.1"
+                                class="form-control"
+                                id="credit"
+                                name="credit"
+                                value="3"
+                                placeholder="e.g. 3.0"
+                            >
+
+                        </div>
+
+
+                        <!-- Add Button -->
+                        <button
+                            type="submit"
+                            class="btn btn-primary w-100 rounded-3"
+                        >
+
+                            <i class="bi bi-plus-lg me-1"></i>
+                            Add Subject
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Subject List -->
+        <div class="col-lg-8">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+
+                        <h2 class="h5 fw-bold mb-0">
+                            Your Subjects
+                        </h2>
+
+                        <span class="badge bg-light text-dark border">
+                            {{ subjects|length }} Total
+                        </span>
+
+                    </div>
+
+
+                    {% if subjects %}
+
+                        <div class="list-group list-group-flush border-top">
+
+                            {% for subject in subjects %}
+
+                                <div class="list-group-item px-0 py-3 d-flex align-items-center justify-content-between">
+
+                                    <!-- Subject Information -->
+                                    <div class="d-flex align-items-center gap-3">
+
+                                        <div
+                                            class="avatar-sm rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center fw-bold"
+                                            style="width: 40px; height: 40px;"
+                                        >
+                                            {{ subject['name'][0]|upper if subject['name'] else 'S' }}
+                                        </div>
+
+
+                                        <div>
+
+                                            <h3 class="h6 mb-0 fw-bold">
+                                                {{ subject['name'] }}
+                                            </h3>
+
+
+                                            <div class="d-flex align-items-center gap-2 mt-1">
+
+                                                {% if subject['code'] %}
+
+                                                    <span class="badge bg-secondary-subtle text-secondary border">
+                                                        {{ subject['code'] }}
+                                                    </span>
+
+                                                {% endif %}
+
+
+                                                {% if subject['credit'] %}
+
+                                                    <span class="text-muted small">
+
+                                                        <i class="bi bi-award me-1"></i>
+
+                                                        {{ subject['credit'] }} Credits
+
+                                                    </span>
+
+                                                {% endif %}
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- Delete Button -->
+                                    <div class="d-flex align-items-center gap-2">
+
+                                        <a
+                                            href="{{ url_for('delete_subject', subject_id=subject['id']) }}"
+                                            class="btn btn-outline-danger btn-sm border-0 rounded-circle p-2"
+                                            onclick="return confirm('Are you sure you want to delete this subject?');"
+                                            title="Delete Subject"
+                                        >
+
+                                            <i class="bi bi-trash"></i>
+
+                                        </a>
+
+                                    </div>
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                    {% else %}
+
+                        <!-- No Subject Message -->
+                        <div class="text-center py-5">
+
+                            <i class="bi bi-journal-x display-4 text-muted"></i>
+
+                            <p class="text-muted mt-3 mb-0">
+
+                                No subjects added yet.
+                                Add your first subject using the form.
+
+                            </p>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+```

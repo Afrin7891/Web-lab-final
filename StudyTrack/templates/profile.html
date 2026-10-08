@@ -1,0 +1,331 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile - UniPlan{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+    <div class="col-lg-8">
+
+        <!-- Page Header -->
+        <div class="mb-4">
+
+            <h2 class="fw-bold">
+                <i class="bi bi-person-circle text-primary"></i>
+                My Profile
+            </h2>
+
+            <p class="text-secondary">
+                View and update your UniPlan account information.
+            </p>
+
+        </div>
+
+
+        <!-- Profile Card -->
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body p-4 p-md-5">
+
+                <!-- Profile Header -->
+                <div class="text-center mb-4">
+
+                    <div class="profile-avatar">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+
+                    <h4 class="fw-bold mt-3 mb-1">
+                        {{ user['name'] }}
+                    </h4>
+
+                    <p class="text-secondary mb-0">
+
+                        {% if user['role'] == 'admin' %}
+
+                            <span class="badge bg-danger">
+                                Administrator
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-primary">
+                                Student
+                            </span>
+
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+
+                <hr class="my-4">
+
+
+                <!-- Profile Form -->
+                <form
+                    method="POST"
+                    action="{{ url_for('profile') }}"
+                >
+
+                    <!-- Full Name -->
+                    <div class="mb-4">
+
+                        <label
+                            for="name"
+                            class="form-label fw-semibold"
+                        >
+                            Full Name
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+                                <i class="bi bi-person"></i>
+                            </span>
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="name"
+                                name="name"
+                                value="{{ user['name'] }}"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Email -->
+                    <div class="mb-4">
+
+                        <label
+                            for="email"
+                            class="form-label fw-semibold"
+                        >
+                            Email Address
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+                                <i class="bi bi-envelope"></i>
+                            </span>
+
+                            <input
+                                type="email"
+                                class="form-control"
+                                id="email"
+                                name="email"
+                                value="{{ user['email'] }}"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Role -->
+                    <div class="mb-4">
+
+                        <label class="form-label fw-semibold">
+                            Account Type
+                        </label>
+
+                        <div class="form-control bg-light">
+
+                            {% if user['role'] == 'admin' %}
+
+                                <i class="bi bi-shield-check text-danger"></i>
+                                Administrator
+
+                            {% else %}
+
+                                <i class="bi bi-mortarboard text-primary"></i>
+                                Student
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Account ID -->
+                    <div class="mb-4">
+
+                        <label class="form-label fw-semibold">
+                            Account ID
+                        </label>
+
+                        <div class="form-control bg-light">
+                            #{{ user['id'] }}
+                        </div>
+
+                    </div>
+
+
+                    <!-- Update Button -->
+                    <div class="d-flex justify-content-end">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary px-4"
+                        >
+
+                            <i class="bi bi-check-circle"></i>
+                            Update Profile
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <!-- Account Information -->
+        <div class="card border-0 shadow-sm mt-4">
+
+            <div class="card-body p-4">
+
+                <h5 class="fw-bold mb-3">
+
+                    <i class="bi bi-info-circle text-primary"></i>
+                    Account Information
+
+                </h5>
+
+                <div class="row g-3">
+
+                    <!-- Account Name -->
+                    <div class="col-md-6">
+
+                        <div class="info-box">
+
+                            <small class="text-secondary">
+                                Account Name
+                            </small>
+
+                            <div class="fw-semibold">
+                                {{ user['name'] }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Email -->
+                    <div class="col-md-6">
+
+                        <div class="info-box">
+
+                            <small class="text-secondary">
+                                Email
+                            </small>
+
+                            <div class="fw-semibold">
+                                {{ user['email'] }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- User Role -->
+                    <div class="col-md-6">
+
+                        <div class="info-box">
+
+                            <small class="text-secondary">
+                                User Role
+                            </small>
+
+                            <div class="fw-semibold">
+
+                                {% if user['role'] == 'admin' %}
+
+                                    Administrator
+
+                                {% else %}
+
+                                    Student
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- User ID -->
+                    <div class="col-md-6">
+
+                        <div class="info-box">
+
+                            <small class="text-secondary">
+                                User ID
+                            </small>
+
+                            <div class="fw-semibold">
+                                #{{ user['id'] }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Navigation -->
+        <div class="mt-4">
+
+            {% if user['role'] == 'student' %}
+
+                <a
+                    href="{{ url_for('dashboard') }}"
+                    class="btn btn-outline-primary"
+                >
+
+                    <i class="bi bi-arrow-left"></i>
+                    Back to Dashboard
+
+                </a>
+
+            {% else %}
+
+                <a
+                    href="{{ url_for('admin') }}"
+                    class="btn btn-outline-primary"
+                >
+
+                    <i class="bi bi-arrow-left"></i>
+                    Back to Admin Dashboard
+
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

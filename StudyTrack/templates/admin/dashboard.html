@@ -1,0 +1,542 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - UniPlan{% endblock %}
+
+{% block content %}
+
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h2 class="fw-bold mb-1">
+            <i class="bi bi-speedometer2 text-primary"></i>
+            Admin Dashboard
+        </h2>
+
+        <p class="text-muted mb-0">
+            Monitor students and academic activities.
+        </p>
+    </div>
+
+    <a href="{{ url_for('admin_students') }}"
+       class="btn btn-primary">
+
+        <i class="bi bi-people"></i>
+        Manage Students
+
+    </a>
+
+</div>
+
+
+<!-- Statistics -->
+<div class="row g-4 mb-4">
+
+    <!-- Total Students -->
+    <div class="col-md-6 col-lg-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <p class="text-muted mb-1">
+                            Total Students
+                        </p>
+
+                        <h2 class="fw-bold mb-0">
+                            {{ total_students }}
+                        </h2>
+
+                    </div>
+
+                    <div class="display-6 text-primary">
+                        <i class="bi bi-people"></i>
+                    </div>
+
+                </div>
+
+                <a href="{{ url_for('admin_students') }}"
+                   class="small text-decoration-none">
+
+                    View Students →
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Total Subjects -->
+    <div class="col-md-6 col-lg-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <p class="text-muted mb-1">
+                            Total Subjects
+                        </p>
+
+                        <h2 class="fw-bold mb-0">
+                            {{ total_subjects }}
+                        </h2>
+
+                    </div>
+
+                    <div class="display-6 text-success">
+                        <i class="bi bi-book"></i>
+                    </div>
+
+                </div>
+
+                <p class="small text-muted mb-0">
+                    Subjects added by students
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Total Tasks -->
+    <div class="col-md-6 col-lg-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <p class="text-muted mb-1">
+                            Total Tasks
+                        </p>
+
+                        <h2 class="fw-bold mb-0">
+                            {{ total_tasks }}
+                        </h2>
+
+                    </div>
+
+                    <div class="display-6 text-warning">
+                        <i class="bi bi-list-check"></i>
+                    </div>
+
+                </div>
+
+                <p class="small text-muted mb-0">
+                    Academic tasks
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Total Exams -->
+    <div class="col-md-6 col-lg-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <p class="text-muted mb-1">
+                            Total Exams
+                        </p>
+
+                        <h2 class="fw-bold mb-0">
+                            {{ total_exams }}
+                        </h2>
+
+                    </div>
+
+                    <div class="display-6 text-danger">
+                        <i class="bi bi-calendar-event"></i>
+                    </div>
+
+                </div>
+
+                <p class="small text-muted mb-0">
+                    Upcoming academic exams
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Task Analytics -->
+<div class="row g-4 mb-4">
+
+    <!-- Completed -->
+    <div class="col-md-6">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+
+                    <div>
+
+                        <h5 class="fw-bold mb-1">
+                            ✅ Completed Tasks
+                        </h5>
+
+                        <p class="text-muted small mb-0">
+                            Tasks completed by all students
+                        </p>
+
+                    </div>
+
+                    <h2 class="fw-bold text-success">
+                        {{ completed_tasks }}
+                    </h2>
+
+                </div>
+
+                {% if total_tasks > 0 %}
+
+                    <div class="progress"
+                         style="height: 12px;">
+
+                        <div class="progress-bar bg-success"
+                             style="width: {{ (completed_tasks / total_tasks * 100)|round|int }}%;">
+
+                        </div>
+
+                    </div>
+
+                    <small class="text-muted">
+                        {{ (completed_tasks / total_tasks * 100)|round|int }}%
+                        completion rate
+                    </small>
+
+                {% else %}
+
+                    <div class="progress"
+                         style="height: 12px;">
+
+                        <div class="progress-bar bg-success"
+                             style="width: 0%;">
+
+                        </div>
+
+                    </div>
+
+                    <small class="text-muted">
+                        No tasks available
+                    </small>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Pending -->
+    <div class="col-md-6">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+
+                    <div>
+
+                        <h5 class="fw-bold mb-1">
+                            ⏳ Pending Tasks
+                        </h5>
+
+                        <p class="text-muted small mb-0">
+                            Tasks waiting for completion
+                        </p>
+
+                    </div>
+
+                    <h2 class="fw-bold text-warning">
+                        {{ pending_tasks }}
+                    </h2>
+
+                </div>
+
+                {% if total_tasks > 0 %}
+
+                    <div class="progress"
+                         style="height: 12px;">
+
+                        <div class="progress-bar bg-warning"
+                             style="width: {{ (pending_tasks / total_tasks * 100)|round|int }}%;">
+
+                        </div>
+
+                    </div>
+
+                    <small class="text-muted">
+                        {{ (pending_tasks / total_tasks * 100)|round|int }}%
+                        pending
+                    </small>
+
+                {% else %}
+
+                    <div class="progress"
+                         style="height: 12px;">
+
+                        <div class="progress-bar bg-warning"
+                             style="width: 0%;">
+
+                        </div>
+
+                    </div>
+
+                    <small class="text-muted">
+                        No tasks available
+                    </small>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Popular Subjects -->
+<div class="card border-0 shadow-sm mb-4">
+
+    <div class="card-header bg-white border-0 py-3">
+
+        <div class="d-flex justify-content-between align-items-center">
+
+            <div>
+
+                <h5 class="fw-bold mb-1">
+                    📚 Popular Subjects
+                </h5>
+
+                <p class="text-muted small mb-0">
+                    Subjects currently used by students
+                </p>
+
+            </div>
+
+            <span class="badge bg-primary">
+                Analytics
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+        {% if popular_subjects %}
+
+        <div class="row g-3">
+
+            {% for subject in popular_subjects %}
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="border rounded p-3 h-100">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <h6 class="fw-bold mb-1">
+                                {{ subject.name }}
+                            </h6>
+
+                            {% if subject.code %}
+
+                            <small class="text-muted">
+                                {{ subject.code }}
+                            </small>
+
+                            {% endif %}
+
+                        </div>
+
+                        <div class="text-primary fs-4">
+                            <i class="bi bi-book"></i>
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between">
+
+                        <span class="small text-muted">
+                            Students
+                        </span>
+
+                        <strong>
+                            {{ subject.student_count }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <div class="text-center py-4">
+
+            <div class="display-5 mb-2">
+                📚
+            </div>
+
+            <h6 class="fw-bold">
+                No Subject Data
+            </h6>
+
+            <p class="text-muted mb-0">
+                Students have not added subjects yet.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<!-- Admin Quick Actions -->
+<div class="card border-0 shadow-sm mb-4">
+
+    <div class="card-header bg-white border-0 py-3">
+
+        <h5 class="fw-bold mb-0">
+            ⚡ Admin Quick Actions
+        </h5>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="row g-3">
+
+            <div class="col-md-4">
+
+                <a href="{{ url_for('admin_students') }}"
+                   class="btn btn-outline-primary w-100 py-3">
+
+                    <i class="bi bi-people fs-5"></i>
+
+                    <br>
+
+                    Manage Students
+
+                </a>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <a href="{{ url_for('index') }}"
+                   class="btn btn-outline-success w-100 py-3">
+
+                    <i class="bi bi-house fs-5"></i>
+
+                    <br>
+
+                    View Website
+
+                </a>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <a href="{{ url_for('logout') }}"
+                   class="btn btn-outline-danger w-100 py-3">
+
+                    <i class="bi bi-box-arrow-right fs-5"></i>
+
+                    <br>
+
+                    Logout
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Admin Information -->
+<div class="alert alert-info border-0 shadow-sm">
+
+    <div class="d-flex align-items-start">
+
+        <div class="fs-3 me-3">
+            💡
+        </div>
+
+        <div>
+
+            <h6 class="fw-bold mb-1">
+                Admin Analytics
+            </h6>
+
+            <p class="mb-0 small">
+                This dashboard gives the administrator an overview of
+                students, subjects, tasks and academic activities in UniPlan.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
